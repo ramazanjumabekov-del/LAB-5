@@ -1,35 +1,32 @@
 import React, { useState } from 'react';
 import { AuthForm } from './components/AuthForm';
+import { AdBoard } from './components/AdBoard';
 import { Loader } from './components/Loader';
 
 function App() {
   const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState<string | null>(null);
+  const [token, setToken] = useState<string | null>(localStorage.getItem('token'));
+
+  const handleLoginSuccess = (newToken: string) => {
+    localStorage.setItem('token', newToken);
+    setToken(newToken);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setToken(null);
+  };
 
   if (loading) {
     return <Loader />;
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: '#1a1a1a', color: '#fff', padding: '40px 20px', boxSizing: 'border-box' }}>
-      <header style={{ textAlign: 'center', marginBottom: '40px' }}>
-        <h1 style={{ fontSize: '2.5rem', margin: '0 0 10px 0' }}>🎸 Rock & Rap Band Official</h1>
-        <p style={{ color: '#aaa', fontSize: '1.1rem' }}>Добро пожаловать на официальный сайт музыкальной группы!</p>
-      </header>
-
-      {user ? (
-        <div style={{ textAlign: 'center', background: '#242424', padding: '30px', borderRadius: '8px', maxWidth: '400px', margin: '0 auto' }}>
-          <h2>Добро пожаловать, {user}!</h2>
-          <p style={{ color: '#aaa' }}>Вы успешно вошли в закрытый раздел фанатов.</p>
-          <button
-            onClick={() => setUser(null)}
-            style={{ marginTop: '15px', padding: '10px 20px', background: '#ff4444', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
-          >
-            Выйти
-          </button>
-        </div>
+    <div style={{ minHeight: '100vh', background: '#1a1a1a', color: '#fff', padding: '20px', boxSizing: 'border-box' }}>
+      {!token ? (
+        <AuthForm onAuthSuccess={handleLoginSuccess} setLoading={setLoading} />
       ) : (
-        <AuthForm onAuthSuccess={(username) => setUser(username)} setLoading={setLoading} />
+        <AdBoard token={token} onLogout={handleLogout} />
       )}
     </div>
   );
