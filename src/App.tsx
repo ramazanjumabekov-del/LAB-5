@@ -13,13 +13,11 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [token, setToken] = useState<string | null>(localStorage.getItem('token'));
   
-  // Состояния для доски объявлений
   const [ads, setAds] = useState<Ad[]>([]);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [error, setError] = useState('');
 
-  // Загружаем объявления при наличии токена
   useEffect(() => {
     if (token) {
       api.getAds()
@@ -78,7 +76,6 @@ export default function App() {
 
           {error && <p style={{ color: '#ff4444' }}>Ошибка: {error}</p>}
 
-          {/* Форма создания объявления */}
           <form onSubmit={handleCreateAd} style={{ background: '#242424', padding: '20px', borderRadius: '8px', marginBottom: '25px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
             <h3 style={{ margin: '0 0 5px 0' }}>Создать объявление</h3>
             <input
@@ -101,7 +98,6 @@ export default function App() {
             </button>
           </form>
 
-          {/* Список объявлений */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
             {ads.length === 0 ? (
               <p style={{ color: '#aaa', textAlign: 'center' }}>Пока нет объявлений...</p>
@@ -119,4 +115,3 @@ export default function App() {
     </div>
   );
 }
-// Updated board component
