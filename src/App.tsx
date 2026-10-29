@@ -119,3 +119,4 @@ export default function App() {
     </div>
   );
 }
+// Updated board component
